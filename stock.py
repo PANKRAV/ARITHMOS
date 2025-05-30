@@ -12,7 +12,7 @@ class Stock():
         self.stock = yf.download(name, period=f"{days}d", interval=f"{step}m")
         self.file = f"{self.name}_5d_30m.csv"
         self.close = self.stock['Close'].dropna().reset_index()
-        self.fit = Model(self)
+        self.fit = Model(self, 80)
         
         
         
@@ -26,10 +26,16 @@ class Stock():
 
         
 class Model():
-    def __init__(self, stock : Stock):
+    def __init__(self, stock : Stock, split_percent : int = 80):
         self.x = np.arange(len(stock.close))
-        self.y = stock.close.values
-        print(self.y)
+        self.y = stock.close["BMW.DE"].values
+        self.split_point = (split_percent*len(self.x))//100
+        self.x_train = self.x[:self.split_point]
+        self.x_test = self.x[self.split_point:]
+        self.y_train = self.y[:self.split_point]
+        self.y_test = self.y[self.split_point:]
+        print(len(self.x_train)/len(self.x_test))
+        
         
 
 
@@ -38,7 +44,7 @@ def main():
     bmw = Stock("BMW.DE", 5, 30)
     #print(bmw)
    # print(bmw.stock.to_csv(bmw.file))
-    model = Model(bmw)
+    
     
 
 
