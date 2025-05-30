@@ -5,6 +5,7 @@ import scipy
 import matplotlib as mat
 import csv
 import sys
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 class Stock():
     def __init__(self, name : str, days : int, step : int) :
@@ -34,7 +35,20 @@ class Model():
         self.x_test = self.x[self.split_point:]
         self.y_train = self.y[:self.split_point]
         self.y_test = self.y[self.split_point:]
+        self.errors = []
+        self.models= {}
         print(len(self.x_train)/len(self.x_test))
+    
+
+    def fit(self, deg: int) -> None :
+        coeffs = np.polyfit(self.x_train, self.y_train, deg)
+        model = np.poly1d(coeffs)
+        y_pred = model(self.x_test)
+
+        mae = mean_absolute_error(self.y_test, y_pred)
+        mse = mean_squared_error(self.y_test, y_pred)
+        self.errors.append((deg, mae, mse))
+        self.models[deg] = model
         
         
 
