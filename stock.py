@@ -59,7 +59,7 @@ class Model():
         self.errors.append((deg, mae, mse, self.coeffs[deg]))
         self.models[deg] = model
     
-
+#
     def predict(self, model, N) :
         len_x = len(self.x)
         model = np.poly1d(model)
