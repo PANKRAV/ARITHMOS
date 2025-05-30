@@ -81,22 +81,38 @@ class Model():
         plt.tight_layout()
         plt.show()
 
-        
-        
+    def calculateAreaMean(self, deg):
+            ...
+    def compute_meanvalues(self, deg):
+        y_fit = self.models[deg](self.x)
+        area_trapz = trapezoid(y_fit, self.x)
+        area_simpson = simpson(y_fit, self.x)
+        mean_trapz = area_trapz / len(self.x)
+        mean_simpson = area_simpson / len(self.x)
+        return mean_trapz, mean_simpson
 
 
 
 def main():
     bmw = Stock("BMW.DE", 5, 30)
-    #print(bmw)
+    mean = {
+        "Simp":{},
+        "Trapz":{}
+    }
     for deg in range(1, 4):
         bmw.model._model(deg)
         bmw.model.fit(deg, bmw.model.models[deg])
+        val = bmw.model.compute_meanvalues(deg)
+        mean["Simp"][deg] = val[0]
+        mean["Trapz"][deg] = val[1]
+    
+    print(mean)
 
     #bmw.model.predict(bmw.model.errors[1][3], 48) #καμπυλη πολυωνυμου δευτερου βαθμου
 
     best_model = min(bmw.model.errors, key=lambda t: t[1])
     bmw.model.predict(best_model[3], 48)
+
     
         
             
