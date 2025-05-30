@@ -13,7 +13,7 @@ class Stock():
         self.stock = yf.download(name, period=f"{days}d", interval=f"{step}m")
         self.file = f"{self.name}_5d_30m.csv"
         self.close = self.stock['Close'].dropna().reset_index()
-        self.fit = Model(self, 80)
+        self.model = Model(self, 80)
         
         
         
@@ -57,7 +57,9 @@ class Model():
 def main():
     bmw = Stock("BMW.DE", 5, 30)
     #print(bmw)
-   # print(bmw.stock.to_csv(bmw.file))
+    for deg in range(1, 4):
+        bmw.model.fit(deg)
+    print(bmw.model.errors)
     
     
 
