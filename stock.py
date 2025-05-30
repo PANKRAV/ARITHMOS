@@ -11,16 +11,21 @@ class Stock():
         self.name = name
         self.stock = yf.download(name, period=f"{days}d", interval=f"{step}m")
         self.file = f"{self.name}_5d_30m.csv"
-
+        
+        
+        
+        self.stock.to_csv(self.file)
 
     def __str__(self):
-        return (str(self.stock))
+        return (str(self.stock.head()))
 
         
 
 def main():
     bmw = Stock("BMW.DE", 5, 30)
     print(bmw)
+    print(bmw.stock.to_csv(bmw.file))
+    
 
 
 
